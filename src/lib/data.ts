@@ -173,3 +173,68 @@ export async function getTodaySunnahs(): Promise<Set<string>> {
     .eq("logged_on", today());
   return new Set((data ?? []).map((r) => r.sunnah_id));
 }
+
+// --- Profile / gender -------------------------------------------------
+export async function getGender(): Promise<"male" | "female" | "unset"> {
+  const supabase = sb();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return "unset";
+  const { data } = await supabase
+    .from("profiles")
+    .select("gender")
+    .eq("id", user.id)
+    .maybeSingle();
+  const g = data?.gender;
+  return g === "male" || g === "female" ? g : "unset";
+}
+
+export async function setGender(gender: "male" | "female" | "unset") {
+  const supabase = sb();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return;
+  await supabase
+    .from("profiles")
+    .upsert({ id: user.id, gender }, { onConflict: "id" });
+}
+
+// --- Menstruation (hayd) day log — female users -----------------------
+export async function toggleHaydToday(active: boolean) {
+  const supabase = sb();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return;
+  if (active) {
+    await supabase
+      .from("hayd_logs")
+      .upsert(
+        { user_id: user.id, logged_on: today() },
+        { onConflict: "user_id,logged_on" }
+      );
+  } else {
+    await supabase
+      .from("hayd_logs")
+      .delete()
+      .eq("user_id", user.id)
+      .eq("logged_on", today());
+  }
+}
+
+export async function isHaydToday(): Promise<boolean> {
+  const supabase = sb();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return false;
+  const { data } = await supabase
+    .from("hayd_logs")
+    .select("id")
+    .eq("user_id", user.id)
+    .eq("logged_on", today())
+    .maybeSingle();
+  return !!data;
+}

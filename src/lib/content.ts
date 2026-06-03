@@ -701,6 +701,121 @@ export const SUNNAHS: Sunnah[] = [
   },
 ];
 
+// --- Gender ----------------------------------------------------------
+export type Gender = "male" | "female" | "unset";
+
+// --- Menstruation (Hayd) companion — for female users ----------------
+// General, non-madhhab-specific. During menstruation a woman does not pray
+// or fast, and makes up missed fasts later (not prayers). Worship continues
+// in many other forms. Differences exist between scholars on some details;
+// users should consult a trusted scholar for personal rulings.
+
+export interface HaydReminder {
+  id: string;
+  text: Bi;
+}
+
+export const HAYD_REMINDERS: HaydReminder[] = [
+  {
+    id: "not-missed",
+    text: {
+      en: "Your prayers right now are paused, not missed. You are not falling behind — you are following exactly what Allah has prescribed for you.",
+      ur: "اس وقت آپ کی نمازیں موقوف ہیں، چھوٹی نہیں۔ آپ پیچھے نہیں رہ رہیں — آپ بالکل وہی کر رہی ہیں جو اللہ نے آپ کے لیے مقرر کیا ہے۔",
+    },
+  },
+  {
+    id: "no-makeup-salah",
+    text: {
+      en: "You do not make up the prayers missed during menstruation. Fasts of Ramadan are made up later; prayers are not. This is a mercy, not a shortcoming.",
+      ur: "حیض کے دوران چھوٹنے والی نمازوں کی قضا نہیں۔ رمضان کے روزوں کی قضا بعد میں ہوتی ہے، نمازوں کی نہیں۔ یہ رحمت ہے، کوتاہی نہیں۔",
+    },
+  },
+  {
+    id: "mercy",
+    text: {
+      en: "This monthly rest is part of how you were created. The Prophet ﷺ called it something Allah has decreed for the daughters of Adam — a natural, honoured part of being a woman.",
+      ur: "یہ ماہانہ آرام آپ کی تخلیق کا حصہ ہے۔ نبی ﷺ نے اسے وہ چیز فرمایا جو اللہ نے بناتِ آدم کے لیے مقرر کی ہے — عورت ہونے کا ایک فطری اور باعزت پہلو۔",
+    },
+  },
+  {
+    id: "closeness",
+    text: {
+      en: "Closeness to Allah is never paused. Salah is one door of worship; right now many other doors stand wide open for you.",
+      ur: "اللہ سے قربت کبھی موقوف نہیں ہوتی۔ نماز عبادت کا ایک دروازہ ہے؛ اس وقت آپ کے لیے بہت سے دوسرے دروازے کھلے ہیں۔",
+    },
+  },
+];
+
+// Acts of worship that remain open during menstruation
+export interface HaydAct {
+  id: string;
+  title: Bi;
+  detail: Bi;
+}
+
+export const HAYD_ACTS: HaydAct[] = [
+  {
+    id: "dhikr",
+    title: { en: "Dhikr & remembrance", ur: "ذکر و اذکار" },
+    detail: {
+      en: "SubhanAllah, Alhamdulillah, La ilaha illallah, Allahu Akbar, istighfar, salawat on the Prophet ﷺ — all freely.",
+      ur: "سبحان اللہ، الحمد للہ، لا الٰہ الا اللہ، اللہ اکبر، استغفار، نبی ﷺ پر درود — سب بلا روک۔",
+    },
+  },
+  {
+    id: "dua",
+    title: { en: "Dua — speak to Allah", ur: "دعا — اللہ سے بات" },
+    detail: {
+      en: "Make dua any time, in any language. These can be among your most heartfelt conversations with Allah.",
+      ur: "کسی بھی وقت، کسی بھی زبان میں دعا کریں۔ یہ اللہ سے آپ کی سب سے دلی گفتگو ہو سکتی ہے۔",
+    },
+  },
+  {
+    id: "quran-listen",
+    title: { en: "Listen to the Qur'an", ur: "قرآن سننا" },
+    detail: {
+      en: "Listening to Qur'an recitation and reflecting on its meaning is encouraged. (On reciting/touching the mushaf, scholars differ — follow what you've learned.)",
+      ur: "قرآن کی تلاوت سننا اور اس کے معنی پر غور کرنا مستحب ہے۔ (تلاوت یا مصحف چھونے میں علما کا اختلاف ہے — جو آپ نے سیکھا اس پر عمل کریں۔)",
+    },
+  },
+  {
+    id: "learn",
+    title: { en: "Seek knowledge", ur: "علم حاصل کرنا" },
+    detail: {
+      en: "Read tafsir, hadith, seerah, and Islamic books. Use this time to learn something new about your deen.",
+      ur: "تفسیر، حدیث، سیرت اور اسلامی کتب پڑھیں۔ اس وقت کو دین کے بارے میں کچھ نیا سیکھنے کے لیے استعمال کریں۔",
+    },
+  },
+  {
+    id: "charity",
+    title: { en: "Give in charity", ur: "صدقہ دینا" },
+    detail: {
+      en: "Sadaqah, even a smile or a kind word, continues to earn reward. Generosity has no pause.",
+      ur: "صدقہ، حتیٰ کہ ایک مسکراہٹ یا اچھی بات بھی، اجر کماتی رہتی ہے۔ سخاوت میں کوئی وقفہ نہیں۔",
+    },
+  },
+  {
+    id: "good-character",
+    title: { en: "Good character", ur: "حسنِ اخلاق" },
+    detail: {
+      en: "Kindness to family, patience, gratitude, controlling anger — character is worship that never stops.",
+      ur: "اہلِ خانہ سے حسنِ سلوک، صبر، شکر، غصے پر قابو — کردار وہ عبادت ہے جو کبھی نہیں رکتی۔",
+    },
+  },
+];
+
+// Gender-aware encouragement shown on the dashboard
+export const GENDER_NOTES: Record<"male" | "female", Bi[]> = {
+  male: [
+    { en: "Praying in congregation multiplies the reward — aim for the masjid when you can.", ur: "باجماعت نماز اجر کو بڑھاتی ہے — جب ممکن ہو مسجد کا رخ کریں۔" },
+    { en: "Be the calm in your home. The best of you are best to their families.", ur: "اپنے گھر میں سکون بنیں۔ تم میں بہترین وہ ہیں جو اپنے گھر والوں کے لیے بہترین ہیں۔" },
+  ],
+  female: [
+    { en: "Your worship at home is as beloved to Allah as any prayer in the masjid.", ur: "گھر میں آپ کی عبادت اللہ کو مسجد کی کسی نماز جتنی ہی محبوب ہے۔" },
+    { en: "On your monthly days, worship continues through dhikr, dua, learning and kindness.", ur: "ماہانہ ایام میں عبادت ذکر، دعا، علم اور حسنِ سلوک سے جاری رہتی ہے۔" },
+  ],
+};
+
 // Deterministic "daily" pick so content rotates by date
 export function daily<T>(arr: T[]): T {
   const day = Math.floor(Date.now() / 86400000);

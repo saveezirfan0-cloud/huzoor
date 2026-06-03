@@ -89,6 +89,31 @@ export const dict = {
     },
     followedToday: { en: "followed today", ur: "آج اپنائیں" },
   },
+  gender: {
+    welcome: { en: "Welcome to Hudoor", ur: "حضور میں خوش آمدید" },
+    intro: {
+      en: "To tailor your worship reminders, let us know who you're praying as. This stays private to you and you can change or remove it anytime in Settings.",
+      ur: "آپ کی عبادت کی یاد دہانیاں بہتر بنانے کے لیے بتائیں۔ یہ آپ تک نجی رہتا ہے اور آپ اسے سیٹنگز میں کبھی بھی بدل یا ہٹا سکتی/سکتے ہیں۔",
+    },
+    male: { en: "Male", ur: "مرد" },
+    female: { en: "Female", ur: "عورت" },
+    skip: { en: "Prefer not to say", ur: "بتانا نہیں چاہتا/چاہتی" },
+    settings: { en: "Gender (for tailored reminders)", ur: "جنس (موزوں یاد دہانیوں کے لیے)" },
+    clear: { en: "Clear", ur: "ہٹا دیں" },
+  },
+  hayd: {
+    title: { en: "Monthly Companion", ur: "ماہانہ ساتھی" },
+    sub: {
+      en: "Worship continues — in different forms",
+      ur: "عبادت جاری رہتی ہے — مختلف صورتوں میں",
+    },
+    onToday: { en: "On my cycle today", ur: "آج ایام میں ہوں" },
+    acts: { en: "What you can do now", ur: "اب آپ کیا کر سکتی ہیں" },
+    note: {
+      en: "General guidance; scholars differ on some details. For personal rulings, ask a trusted scholar.",
+      ur: "عمومی رہنمائی؛ بعض تفصیلات میں علما کا اختلاف ہے۔ ذاتی مسائل کے لیے کسی معتبر عالم سے رجوع کریں۔",
+    },
+  },
 } as const;
 
 export function t(

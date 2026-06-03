@@ -1,5 +1,5 @@
-const CACHE = "hudoor-v2";
-const ASSETS = ["/dashboard", "/tracker", "/azkar", "/sunnah", "/duas", "/salah", "/emotions", "/character", "/mindfulness", "/reflection", "/manifest.json"];
+const CACHE = "hudoor-v3";
+const ASSETS = ["/dashboard", "/tracker", "/azkar", "/sunnah", "/duas", "/salah", "/emotions", "/character", "/mindfulness", "/reflection", "/monthly", "/settings", "/manifest.json"];
 
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ASSETS)).catch(() => {}));

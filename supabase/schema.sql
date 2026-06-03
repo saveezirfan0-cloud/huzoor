@@ -9,11 +9,14 @@
 create table if not exists public.profiles (
   id          uuid primary key references auth.users(id) on delete cascade,
   display_name text,
+  gender       text,                       -- 'male' | 'female' | null (unset)
   language     text default 'en',         -- 'en' | 'ur'
   madhhab      text default 'general',     -- general | hanafi | shafii | maliki | hanbali
   timezone     text,
   created_at   timestamptz default now()
 );
+-- safeguard for projects created before the gender column existed:
+alter table public.profiles add column if not exists gender text;
 
 -- 2. PRAYER LOGS -------------------------------------------------------
 create table if not exists public.prayer_logs (
@@ -88,6 +91,15 @@ create table if not exists public.sunnah_logs (
   unique (user_id, sunnah_id, logged_on)
 );
 
+-- 9. HAYD (MENSTRUATION) LOGS — private, female users ------------------
+create table if not exists public.hayd_logs (
+  id         uuid primary key default gen_random_uuid(),
+  user_id    uuid not null references auth.users(id) on delete cascade,
+  logged_on  date not null default current_date,
+  created_at timestamptz default now(),
+  unique (user_id, logged_on)
+);
+
 -- =====================================================================
 --  ROW-LEVEL SECURITY
 -- =====================================================================
@@ -99,6 +111,7 @@ alter table public.journal_entries    enable row level security;
 alter table public.character_progress enable row level security;
 alter table public.saved_content      enable row level security;
 alter table public.sunnah_logs         enable row level security;
+alter table public.hayd_logs           enable row level security;
 
 -- Helper: a single policy per table that ties every row to auth.uid()
 do $$
@@ -106,7 +119,7 @@ declare t text;
 begin
   foreach t in array array[
     'profiles','prayer_logs','dhikr_logs','emotion_logs',
-    'journal_entries','character_progress','saved_content','sunnah_logs'
+    'journal_entries','character_progress','saved_content','sunnah_logs','hayd_logs'
   ]
   loop
     -- profiles keys on id; others on user_id

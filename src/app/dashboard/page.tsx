@@ -6,12 +6,15 @@ import Shell from "@/components/shell";
 import { Bi, SignOutButton } from "@/components/ui";
 import { useLang } from "@/lib/lang-context";
 import { dict } from "@/lib/i18n";
-import { AYAT, MOODS, daily } from "@/lib/content";
+import { AYAT, MOODS, daily, GENDER_NOTES } from "@/lib/content";
 import { getStreak, logMood, logDhikr, getTodayDhikr } from "@/lib/data";
+import { useGender } from "@/lib/gender-context";
+import GenderPrompt from "@/components/gender-prompt";
 
 export default function Dashboard() {
   const { lang } = useLang();
   const ur = lang === "ur";
+  const { gender } = useGender();
   const [streak, setStreak] = useState(0);
   const [dhikr, setDhikr] = useState(0);
   const [mood, setMood] = useState<string | null>(null);
@@ -39,6 +42,7 @@ export default function Dashboard() {
 
   return (
     <Shell>
+      <GenderPrompt />
       <div className="animate-fade-up space-y-5">
         <div className="flex items-end justify-between">
           <div>
@@ -47,7 +51,12 @@ export default function Dashboard() {
             </p>
             <h1 className="font-arabic text-2xl text-deen-900">السلام علیکم</h1>
           </div>
-          <SignOutButton />
+          <div className="flex items-center gap-3">
+            <Link href="/settings" className="text-xs text-deen-goldDark underline">
+              {ur ? "ترتیبات" : "Settings"}
+            </Link>
+            <SignOutButton />
+          </div>
         </div>
 
         {/* Focus card */}
@@ -148,6 +157,33 @@ export default function Dashboard() {
             </Link>
           ))}
         </div>
+
+        {/* Gender-aware encouragement */}
+        {gender !== "unset" && (
+          <div className="rounded-xl border border-deen-gold/20 bg-deen-gold/5 p-4">
+            <p className={`text-sm text-deen-ink ${ur ? "font-urdu" : ""}`}>
+              {daily(GENDER_NOTES[gender])[lang]}
+            </p>
+          </div>
+        )}
+
+        {/* Monthly companion — female only */}
+        {gender === "female" && (
+          <Link
+            href="/monthly"
+            className="flex items-center justify-between rounded-xl border border-deen-gold/30 bg-deen-paper p-4"
+          >
+            <div>
+              <p className={`font-semibold text-deen-900 ${ur ? "font-urdu" : ""}`}>
+                {ur ? "ماہانہ ساتھی" : "Monthly Companion"}
+              </p>
+              <p className={`text-xs text-deen-muted ${ur ? "font-urdu" : ""}`}>
+                {ur ? "ایام میں عبادت اور حوصلہ" : "Worship & encouragement during your cycle"}
+              </p>
+            </div>
+            <span className="text-deen-gold">→</span>
+          </Link>
+        )}
       </div>
     </Shell>
   );

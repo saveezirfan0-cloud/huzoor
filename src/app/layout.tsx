@@ -4,6 +4,7 @@ import "@fontsource/inter/400.css";
 import "@fontsource/inter/600.css";
 import "@fontsource/inter/800.css";
 import { LangProvider } from "@/lib/lang-context";
+import { GenderProvider } from "@/lib/gender-context";
 import SWRegister from "@/components/sw-register";
 import "./globals.css";
 
@@ -44,8 +45,10 @@ export default function RootLayout({
         className={`${naskh.variable} ${nastaliq.variable} font-sans antialiased`}
       >
         <LangProvider>
-          <SWRegister />
-          {children}
+          <GenderProvider>
+            <SWRegister />
+            {children}
+          </GenderProvider>
         </LangProvider>
       </body>
     </html>

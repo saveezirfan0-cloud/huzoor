@@ -6,13 +6,21 @@ import { useLang } from "@/lib/lang-context";
 import { dict } from "@/lib/i18n";
 import { PRAYER_DEFS, PRAYER_STATUSES } from "@/lib/content";
 import { logPrayer, getTodayPrayers, getStreak } from "@/lib/data";
+import { useGender } from "@/lib/gender-context";
 
 export default function TrackerPage() {
   const { lang } = useLang();
   const ur = lang === "ur";
+  const { gender } = useGender();
   const [status, setStatus] = useState<Record<string, string | null>>({});
   const [streak, setStreak] = useState(0);
   const [loading, setLoading] = useState(true);
+
+  // Congregation (jama'ah) attendance in the masjid is not obligatory for
+  // women, so the option is hidden for female users.
+  const statuses = PRAYER_STATUSES.filter(
+    (s) => !(gender === "female" && s.id === "jamaah")
+  );
 
   useEffect(() => {
     (async () => {
@@ -79,8 +87,8 @@ export default function TrackerPage() {
                   {p.fard} {ur ? "فرض" : "fard"} · {dict.tracker.sunnahRakah[lang]}: {p.sunnah[lang]}
                 </span>
               </div>
-              <div className="grid grid-cols-4 gap-1.5">
-                {PRAYER_STATUSES.map((s) => {
+              <div className={`grid gap-1.5 ${statuses.length === 4 ? "grid-cols-4" : "grid-cols-3"}`}>
+                {statuses.map((s) => {
                   const active = status[p.id] === s.id;
                   return (
                     <button

@@ -17,12 +17,19 @@ Next.js 15 (App Router) · Supabase (Auth + Postgres + RLS) · Bilingual EN/ار
 
 Bilingual everywhere with instant EN ⇄ اردو toggle and full RTL.
 
-> **Updating an existing Supabase project?** The schema now adds a `status`
-> column to `prayer_logs` and a new `sunnah_logs` table. Re-running
-> `supabase/schema.sql` is safe — it uses `create table if not exists` and the
-> `status` column is added by re-running, but if your `prayer_logs` table already
-> exists without it, run once:
-> `alter table public.prayer_logs add column if not exists status text;`
+**Gender-aware experience:** on first open, users can optionally choose male/female
+(stored privately in their own RLS-protected profile row — never sent to OAuth
+providers, changeable or removable anytime in Settings). Male users see the "in
+congregation" prayer option; female users get a **Monthly Companion** (`/monthly`)
+with reminders, motivation, and the acts of worship that continue during
+menstruation. Content is general and non-madhhab-specific, with a note to consult
+a scholar for personal rulings.
+
+> **Updating an existing Supabase project?** The schema now also adds a `gender`
+> column to `profiles` and a new `hayd_logs` table (plus the earlier `status`
+> column on `prayer_logs` and `sunnah_logs` table). Re-running
+> `supabase/schema.sql` is safe — it uses `create table if not exists` and
+> `add column if not exists` guards.
 
 ---
 
