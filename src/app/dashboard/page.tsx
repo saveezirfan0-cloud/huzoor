@@ -7,7 +7,7 @@ import { Bi, SignOutButton } from "@/components/ui";
 import { useLang } from "@/lib/lang-context";
 import { dict } from "@/lib/i18n";
 import { AYAT, MOODS, daily } from "@/lib/content";
-import { getStreak, logMood, logDhikr } from "@/lib/data";
+import { getStreak, logMood, logDhikr, getTodayDhikr } from "@/lib/data";
 
 export default function Dashboard() {
   const { lang } = useLang();
@@ -19,12 +19,22 @@ export default function Dashboard() {
 
   useEffect(() => {
     getStreak().then(setStreak);
+    getTodayDhikr().then((counts) => {
+      const saved = counts["subhanallah"];
+      if (saved) setDhikr(saved);
+    });
   }, []);
 
+  // persist the count shortly after taps stop, so every tap is saved
+  // (not just multiples of 33) without a network call on every press
+  useEffect(() => {
+    if (dhikr === 0) return;
+    const id = setTimeout(() => logDhikr("subhanallah", dhikr), 500);
+    return () => clearTimeout(id);
+  }, [dhikr]);
+
   function tap() {
-    const n = dhikr + 1;
-    setDhikr(n);
-    if (n % 33 === 0) logDhikr("subhanallah", n);
+    setDhikr((n) => n + 1);
   }
 
   return (
