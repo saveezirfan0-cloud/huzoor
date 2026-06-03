@@ -6,7 +6,10 @@ export const dict = {
   nav: {
     dashboard: { en: "Home", ur: "ہوم" },
     salah: { en: "Salah", ur: "نماز" },
+    tracker: { en: "Tracker", ur: "ٹریکر" },
     duas: { en: "Duas", ur: "دعائیں" },
+    azkar: { en: "Azkar", ur: "اذکار" },
+    sunnah: { en: "Sunnah", ur: "سنت" },
     mindfulness: { en: "Mindfulness", ur: "یکسوئی" },
     emotions: { en: "Feelings", ur: "احساسات" },
     character: { en: "Character", ur: "کردار" },
@@ -62,6 +65,29 @@ export const dict = {
     journey7: { en: "7-day", ur: "۷ دن" },
     journey30: { en: "30-day", ur: "۳۰ دن" },
     journeyLife: { en: "Lifelong", ur: "تاحیات" },
+  },
+  tracker: {
+    title: { en: "Salah Tracker", ur: "نماز ٹریکر" },
+    sub: { en: "Log your five daily prayers", ur: "اپنی پانچ نمازیں درج کریں" },
+    todayDone: { en: "prayed today", ur: "آج ادا کیں" },
+    sunnahRakah: { en: "Sunnah", ur: "سنت" },
+  },
+  azkar: {
+    title: { en: "Azkar Tracker", ur: "اذکار ٹریکر" },
+    sub: { en: "Morning & evening remembrance", ur: "صبح و شام کے اذکار" },
+    morning: { en: "Morning", ur: "صبح" },
+    evening: { en: "Evening", ur: "شام" },
+    anytime: { en: "Anytime", ur: "ہر وقت" },
+    complete: { en: "Complete", ur: "مکمل" },
+    reset: { en: "Reset", ur: "ری سیٹ" },
+  },
+  sunnah: {
+    title: { en: "Daily Sunnahs", ur: "روزمرہ سنتیں" },
+    sub: {
+      en: "Revive a Sunnah today — tap to track",
+      ur: "آج ایک سنت زندہ کریں — ٹریک کرنے کے لیے دبائیں",
+    },
+    followedToday: { en: "followed today", ur: "آج اپنائیں" },
   },
 } as const;
 

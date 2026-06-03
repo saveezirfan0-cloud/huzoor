@@ -59,9 +59,9 @@ export function AppHeader({ title }: { title?: Bi }) {
 
 const NAV = [
   { href: "/dashboard", key: "dashboard", icon: "◈" },
-  { href: "/salah", key: "salah", icon: "🕌" },
-  { href: "/duas", key: "duas", icon: "📿" },
-  { href: "/emotions", key: "emotions", icon: "💚" },
+  { href: "/tracker", key: "tracker", icon: "🕌" },
+  { href: "/azkar", key: "azkar", icon: "📿" },
+  { href: "/sunnah", key: "sunnah", icon: "🌿" },
   { href: "/character", key: "character", icon: "⬡" },
 ] as const;
 

@@ -20,11 +20,14 @@ create table if not exists public.prayer_logs (
   id          uuid primary key default gen_random_uuid(),
   user_id     uuid not null references auth.users(id) on delete cascade,
   prayer_name text not null,               -- Fajr, Dhuhr, ...
+  status      text,                         -- jamaah | prayed | qaza | missed
   focus_score int check (focus_score between 1 and 5),
   logged_on   date not null default current_date,
   created_at  timestamptz default now(),
   unique (user_id, prayer_name, logged_on)
 );
+-- safeguard for projects created before the status column existed:
+alter table public.prayer_logs add column if not exists status text;
 
 -- 3. DHIKR LOGS --------------------------------------------------------
 create table if not exists public.dhikr_logs (
@@ -75,6 +78,16 @@ create table if not exists public.saved_content (
   unique (user_id, content_type, content_id)
 );
 
+-- 8. SUNNAH LOGS -------------------------------------------------------
+create table if not exists public.sunnah_logs (
+  id         uuid primary key default gen_random_uuid(),
+  user_id    uuid not null references auth.users(id) on delete cascade,
+  sunnah_id  text not null,
+  logged_on  date not null default current_date,
+  created_at timestamptz default now(),
+  unique (user_id, sunnah_id, logged_on)
+);
+
 -- =====================================================================
 --  ROW-LEVEL SECURITY
 -- =====================================================================
@@ -85,6 +98,7 @@ alter table public.emotion_logs       enable row level security;
 alter table public.journal_entries    enable row level security;
 alter table public.character_progress enable row level security;
 alter table public.saved_content      enable row level security;
+alter table public.sunnah_logs         enable row level security;
 
 -- Helper: a single policy per table that ties every row to auth.uid()
 do $$
@@ -92,7 +106,7 @@ declare t text;
 begin
   foreach t in array array[
     'profiles','prayer_logs','dhikr_logs','emotion_logs',
-    'journal_entries','character_progress','saved_content'
+    'journal_entries','character_progress','saved_content','sunnah_logs'
   ]
   loop
     -- profiles keys on id; others on user_id

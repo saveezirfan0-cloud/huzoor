@@ -5,21 +5,45 @@ import { createClient } from "./supabase-client";
 const sb = () => createClient();
 const today = () => new Date().toISOString().slice(0, 10);
 
-export async function logPrayer(name: string, focusScore: number) {
+export async function logPrayer(
+  name: string,
+  opts: { focusScore?: number; status?: string }
+) {
   const supabase = sb();
   const {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return;
-  await supabase.from("prayer_logs").upsert(
-    {
-      user_id: user.id,
-      prayer_name: name,
-      focus_score: focusScore,
-      logged_on: today(),
-    },
-    { onConflict: "user_id,prayer_name,logged_on" }
-  );
+  const row: Record<string, unknown> = {
+    user_id: user.id,
+    prayer_name: name,
+    logged_on: today(),
+  };
+  if (opts.focusScore != null) row.focus_score = opts.focusScore;
+  if (opts.status != null) row.status = opts.status;
+  await supabase
+    .from("prayer_logs")
+    .upsert(row, { onConflict: "user_id,prayer_name,logged_on" });
+}
+
+export async function getTodayPrayers(): Promise<
+  Record<string, { status: string | null; focus_score: number | null }>
+> {
+  const supabase = sb();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return {};
+  const { data } = await supabase
+    .from("prayer_logs")
+    .select("prayer_name,status,focus_score")
+    .eq("user_id", user.id)
+    .eq("logged_on", today());
+  const out: Record<string, { status: string | null; focus_score: number | null }> = {};
+  (data ?? []).forEach((r) => {
+    out[r.prayer_name] = { status: r.status, focus_score: r.focus_score };
+  });
+  return out;
 }
 
 export async function logDhikr(adhkarId: string, count: number) {
@@ -32,6 +56,22 @@ export async function logDhikr(adhkarId: string, count: number) {
     { user_id: user.id, adhkar_id: adhkarId, count, logged_on: today() },
     { onConflict: "user_id,adhkar_id,logged_on" }
   );
+}
+
+export async function getTodayDhikr(): Promise<Record<string, number>> {
+  const supabase = sb();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return {};
+  const { data } = await supabase
+    .from("dhikr_logs")
+    .select("adhkar_id,count")
+    .eq("user_id", user.id)
+    .eq("logged_on", today());
+  const out: Record<string, number> = {};
+  (data ?? []).forEach((r) => (out[r.adhkar_id] = r.count));
+  return out;
 }
 
 export async function logMood(mood: string) {
@@ -96,4 +136,40 @@ export async function getStreak(): Promise<number> {
     } else break;
   }
   return streak;
+}
+
+// --- Sunnah tracker ---------------------------------------------------
+export async function toggleSunnah(sunnahId: string, done: boolean) {
+  const supabase = sb();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return;
+  if (done) {
+    await supabase.from("sunnah_logs").upsert(
+      { user_id: user.id, sunnah_id: sunnahId, logged_on: today() },
+      { onConflict: "user_id,sunnah_id,logged_on" }
+    );
+  } else {
+    await supabase
+      .from("sunnah_logs")
+      .delete()
+      .eq("user_id", user.id)
+      .eq("sunnah_id", sunnahId)
+      .eq("logged_on", today());
+  }
+}
+
+export async function getTodaySunnahs(): Promise<Set<string>> {
+  const supabase = sb();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return new Set();
+  const { data } = await supabase
+    .from("sunnah_logs")
+    .select("sunnah_id")
+    .eq("user_id", user.id)
+    .eq("logged_on", today());
+  return new Set((data ?? []).map((r) => r.sunnah_id));
 }

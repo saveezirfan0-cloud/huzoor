@@ -169,7 +169,7 @@ export default function SalahPage() {
                 <button
                   key={n}
                   onClick={async () => {
-                    await logPrayer(prayer, n);
+                    await logPrayer(prayer, { focusScore: n });
                     setDone(true);
                   }}
                   className="flex-1 rounded-xl border border-deen-gold/30 py-4 text-lg font-bold text-deen-800 transition active:scale-95 hover:bg-deen-gold/10"

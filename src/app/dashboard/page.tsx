@@ -117,6 +117,27 @@ export default function Dashboard() {
             ))}
           </div>
         </div>
+
+        {/* Quick access */}
+        <div className="grid grid-cols-4 gap-2">
+          {[
+            { href: "/salah", icon: "🕋", en: "Presence", ur: "حضور" },
+            { href: "/duas", icon: "📖", en: "Duas", ur: "دعائیں" },
+            { href: "/mindfulness", icon: "🍃", en: "Mindful", ur: "یکسوئی" },
+            { href: "/reflection", icon: "✍️", en: "Reflect", ur: "غور" },
+          ].map((q) => (
+            <Link
+              key={q.href}
+              href={q.href}
+              className="flex flex-col items-center gap-1 rounded-xl border border-deen-gold/20 bg-deen-paper py-3"
+            >
+              <span className="text-lg">{q.icon}</span>
+              <span className={`text-[10px] text-deen-muted ${ur ? "font-urdu" : ""}`}>
+                {ur ? q.ur : q.en}
+              </span>
+            </Link>
+          ))}
+        </div>
       </div>
     </Shell>
   );

@@ -4,15 +4,25 @@ A Deen-based mindfulness & self-improvement PWA built on Qur'an and Sunnah.
 Next.js 15 (App Router) · Supabase (Auth + Postgres + RLS) · Bilingual EN/اردو · Installable PWA.
 
 ## Features (MVP)
-1. **Dashboard** — daily focus, prayer streak, tap-tasbih, daily ayah, mood check-in
-2. **Salah Companion** — before (grounding) → during (presence prompts) → after (adhkar) → focus score
-3. **Duas with Meaning** — Arabic, transliteration, translation, *why it's taught*, trait it builds, source
-4. **Islamic Mindfulness** — guided wudu / sleep / anger flows
-5. **Emotion → Guidance** — pick a feeling, get an ayah + hadith + dua + one small action
-6. **Character Building** — traits (sabr, shukr, hilm, tawakkul) with 7/30/lifelong journeys & daily challenges
-7. **Reflection** — daily ayah journaling
+1. **Dashboard** — daily focus, prayer streak, tap-tasbih, daily ayah, mood check-in, quick access
+2. **Salah Tracker** — log all 5 daily prayers (in congregation / prayed / qaza / missed) with streak + daily count
+3. **Salah Companion** — before (grounding) → during (presence prompts) → after (adhkar) → focus score
+4. **Azkar Tracker** — morning / evening / anytime adhkar with tap counters toward target counts
+5. **Sunnahs + Tracker** — a library of daily Sunnahs (with sources) you check off each day
+6. **Duas with Meaning** — Arabic, transliteration, translation, *why it's taught*, trait it builds, source
+7. **Islamic Mindfulness** — guided wudu / sleep / anger flows
+8. **Emotion → Guidance** — pick a feeling, get an ayah + hadith + dua + one small action
+9. **Character Building** — traits (sabr, shukr, hilm, tawakkul) with 7/30/lifelong journeys & daily challenges
+10. **Reflection** — daily ayah journaling
 
 Bilingual everywhere with instant EN ⇄ اردو toggle and full RTL.
+
+> **Updating an existing Supabase project?** The schema now adds a `status`
+> column to `prayer_logs` and a new `sunnah_logs` table. Re-running
+> `supabase/schema.sql` is safe — it uses `create table if not exists` and the
+> `status` column is added by re-running, but if your `prayer_logs` table already
+> exists without it, run once:
+> `alter table public.prayer_logs add column if not exists status text;`
 
 ---
 

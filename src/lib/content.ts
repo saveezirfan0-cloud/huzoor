@@ -514,6 +514,193 @@ export const MOODS: { id: string; label: Bi; emoji: string }[] = [
   { id: "lazy", label: { en: "Low", ur: "سست" }, emoji: "⛰️" },
 ];
 
+// --- Salah tracker definitions ---------------------------------------
+// The five obligatory prayers + their associated Sunnah rak'ah counts.
+export interface PrayerDef {
+  id: string;
+  name: Bi;
+  arabic: string;
+  fard: number;          // obligatory rak'ahs
+  sunnah: Bi;            // associated Sunnah rak'ahs (for reference)
+}
+
+export const PRAYER_DEFS: PrayerDef[] = [
+  { id: "fajr", name: { en: "Fajr", ur: "فجر" }, arabic: "فجر", fard: 2, sunnah: { en: "2 before", ur: "۲ پہلے" } },
+  { id: "dhuhr", name: { en: "Dhuhr", ur: "ظہر" }, arabic: "ظهر", fard: 4, sunnah: { en: "4 before · 2 after", ur: "۴ پہلے · ۲ بعد" } },
+  { id: "asr", name: { en: "Asr", ur: "عصر" }, arabic: "عصر", fard: 4, sunnah: { en: "4 before (ghayr mu'akkadah)", ur: "۴ پہلے (غیر مؤکدہ)" } },
+  { id: "maghrib", name: { en: "Maghrib", ur: "مغرب" }, arabic: "مغرب", fard: 3, sunnah: { en: "2 after", ur: "۲ بعد" } },
+  { id: "isha", name: { en: "Isha", ur: "عشاء" }, arabic: "عشاء", fard: 4, sunnah: { en: "2 after · Witr", ur: "۲ بعد · وتر" } },
+];
+
+export type PrayerStatus = "prayed" | "jamaah" | "qaza" | "missed" | null;
+
+export const PRAYER_STATUSES: { id: Exclude<PrayerStatus, null>; label: Bi; emoji: string }[] = [
+  { id: "jamaah", label: { en: "In congregation", ur: "باجماعت" }, emoji: "🕌" },
+  { id: "prayed", label: { en: "Prayed", ur: "ادا کی" }, emoji: "✅" },
+  { id: "qaza", label: { en: "Made up (qaza)", ur: "قضا" }, emoji: "🕒" },
+  { id: "missed", label: { en: "Missed", ur: "چھوٹ گئی" }, emoji: "—" },
+];
+
+// --- Azkar tracker (morning / evening adhkar with target counts) ------
+export interface Zikr {
+  id: string;
+  category: "morning" | "evening" | "anytime";
+  arabic: string;
+  transliteration: string;
+  translation: Bi;
+  target: number;
+  source: string;
+}
+
+export const AZKAR: Zikr[] = [
+  {
+    id: "subhanallah-100",
+    category: "anytime",
+    arabic: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",
+    transliteration: "Subhanallahi wa bihamdihi",
+    translation: { en: "Glory and praise be to Allah.", ur: "اللہ پاک ہے اور اس کی تعریف کے ساتھ۔" },
+    target: 100,
+    source: "Sahih al-Bukhari 6405",
+  },
+  {
+    id: "istighfar-100",
+    category: "anytime",
+    arabic: "أَسْتَغْفِرُ اللَّهَ",
+    transliteration: "Astaghfirullah",
+    translation: { en: "I seek forgiveness from Allah.", ur: "میں اللہ سے بخشش مانگتا ہوں۔" },
+    target: 100,
+    source: "Sahih Muslim 2702",
+  },
+  {
+    id: "ayatul-kursi",
+    category: "morning",
+    arabic: "اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ…",
+    transliteration: "Allahu la ilaha illa huwal-Hayyul-Qayyum…",
+    translation: { en: "Recite Ayatul Kursi for protection.", ur: "حفاظت کے لیے آیت الکرسی پڑھیں۔" },
+    target: 1,
+    source: "Recite morning & evening · Al-Baqarah 2:255",
+  },
+  {
+    id: "ikhlas-muawwidhatayn",
+    category: "morning",
+    arabic: "قُلْ هُوَ اللَّهُ أَحَدٌ · قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ · قُلْ أَعُوذُ بِرَبِّ النَّاسِ",
+    transliteration: "Al-Ikhlas · Al-Falaq · An-Nas",
+    translation: { en: "Recite the three Quls, three times each.", ur: "تینوں قل، ہر ایک تین بار پڑھیں۔" },
+    target: 3,
+    source: "Sunan Abi Dawud 5082",
+  },
+  {
+    id: "sayyid-istighfar",
+    category: "morning",
+    arabic: "اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَٰهَ إِلَّا أَنْتَ…",
+    transliteration: "Allahumma anta Rabbi la ilaha illa anta…",
+    translation: { en: "The best way of seeking forgiveness.", ur: "بہترین استغفار۔" },
+    target: 1,
+    source: "Sahih al-Bukhari 6306",
+  },
+  {
+    id: "evening-protection",
+    category: "evening",
+    arabic: "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ",
+    transliteration: "A'udhu bikalimatillahit-tammati min sharri ma khalaq",
+    translation: { en: "I seek refuge in Allah's perfect words from the evil of what He created.", ur: "میں اللہ کے کامل کلمات کی پناہ مانگتا ہوں اس کی مخلوق کے شر سے۔" },
+    target: 3,
+    source: "Sahih Muslim 2708",
+  },
+];
+
+// --- Sunnah library + tracker ----------------------------------------
+export interface Sunnah {
+  id: string;
+  title: Bi;
+  detail: Bi;
+  category: "daily" | "food" | "sleep" | "social" | "worship";
+  source: string;
+}
+
+export const SUNNAHS: Sunnah[] = [
+  {
+    id: "miswak",
+    title: { en: "Use the miswak", ur: "مسواک کرنا" },
+    detail: {
+      en: "Clean the teeth with miswak, especially before salah and on waking.",
+      ur: "دانتوں کو مسواک سے صاف کرنا، خاص طور پر نماز سے پہلے اور بیداری پر۔",
+    },
+    category: "daily",
+    source: "Sahih al-Bukhari 887",
+  },
+  {
+    id: "bismillah-food",
+    title: { en: "Say Bismillah before eating", ur: "کھانے سے پہلے بسم اللہ" },
+    detail: {
+      en: "Begin food with Allah's name and eat with the right hand.",
+      ur: "کھانے کا آغاز اللہ کے نام سے کریں اور دائیں ہاتھ سے کھائیں۔",
+    },
+    category: "food",
+    source: "Sahih al-Bukhari 5376",
+  },
+  {
+    id: "right-hand",
+    title: { en: "Begin with the right", ur: "دائیں سے آغاز" },
+    detail: {
+      en: "Favour the right side in dressing, entering the masjid, and eating.",
+      ur: "لباس، مسجد میں داخلے اور کھانے میں دائیں جانب کو ترجیح دیں۔",
+    },
+    category: "daily",
+    source: "Sahih al-Bukhari 168",
+  },
+  {
+    id: "salam",
+    title: { en: "Spread the salam", ur: "سلام پھیلانا" },
+    detail: {
+      en: "Greet others with salam, even those you don't know.",
+      ur: "دوسروں کو سلام کریں، چاہے آپ انہیں نہ جانتے ہوں۔",
+    },
+    category: "social",
+    source: "Sahih al-Bukhari 12",
+  },
+  {
+    id: "right-sleep",
+    title: { en: "Sleep on the right side", ur: "دائیں کروٹ سونا" },
+    detail: {
+      en: "Lie on your right side and recite the sleep adhkar before sleeping.",
+      ur: "دائیں کروٹ لیٹیں اور سونے سے پہلے نیند کے اذکار پڑھیں۔",
+    },
+    category: "sleep",
+    source: "Sahih al-Bukhari 6314",
+  },
+  {
+    id: "duha",
+    title: { en: "Pray Duha", ur: "نمازِ چاشت" },
+    detail: {
+      en: "Offer the forenoon (Duha) prayer — a charity for every joint.",
+      ur: "چاشت کی نماز ادا کریں — ہر جوڑ کے لیے ایک صدقہ۔",
+    },
+    category: "worship",
+    source: "Sahih Muslim 720",
+  },
+  {
+    id: "smile",
+    title: { en: "Smile at others", ur: "مسکرانا" },
+    detail: {
+      en: "A smile in your brother's face is charity.",
+      ur: "اپنے بھائی کے سامنے مسکرانا صدقہ ہے۔",
+    },
+    category: "social",
+    source: "Sunan at-Tirmidhi 1956",
+  },
+  {
+    id: "dhikr-after-salah",
+    title: { en: "Dhikr after salah", ur: "نماز کے بعد ذکر" },
+    detail: {
+      en: "33× SubhanAllah, 33× Alhamdulillah, 34× Allahu Akbar after each prayer.",
+      ur: "ہر نماز کے بعد ۳۳ بار سبحان اللہ، ۳۳ بار الحمد للہ، ۳۴ بار اللہ اکبر۔",
+    },
+    category: "worship",
+    source: "Sahih Muslim 596",
+  },
+];
+
 // Deterministic "daily" pick so content rotates by date
 export function daily<T>(arr: T[]): T {
   const day = Math.floor(Date.now() / 86400000);
